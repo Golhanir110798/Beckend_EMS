@@ -1,0 +1,44 @@
+	package com.st;						
+							
+	import java.security.SecureRandom;						
+	import java.util.Base64;						
+	import java.util.Date;						
+							
+	import org.springframework.beans.factory.annotation.Autowired;						
+	import org.springframework.beans.factory.annotation.Value;						
+	import org.springframework.stereotype.Service;						
+							
+	import io.jsonwebtoken.Claims;						
+	import io.jsonwebtoken.Jwts;						
+	import io.jsonwebtoken.SignatureAlgorithm;						
+	@Service						
+	public class JwtTokenUtil {						
+							
+		private String jwtSecret;					
+							
+		@Autowired					
+		public JwtTokenUtil(@Value("${jwt.secret}") String jwtSecret) {					
+		this.jwtSecret = jwtSecret;					
+		}					
+		public String generateToken(String email) {					
+		return Jwts.builder()					
+		.setSubject(email)					
+		.setIssuedAt(new Date())					
+		.signWith(SignatureAlgorithm.HS512, jwtSecret)					
+		.compact();					
+		}					
+							
+		public boolean validateToken(String token) {					
+		try {					
+		Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);					
+		return true;					
+		} catch (Exception e) {					
+		return false;					
+		}					
+		}					
+							
+		public String getEmailFromToken(String token) {					
+		Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();					
+		return claims.getSubject();					
+		}					
+		}					

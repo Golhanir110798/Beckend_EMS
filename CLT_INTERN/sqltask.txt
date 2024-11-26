@@ -1,0 +1,72 @@
+
+-->create a table 1
+
+CREATE TABLE tab1 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    value INT
+);
+
+=========================================
+
+-->create a table 2
+
+CREATE TABLE tab2 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    data INT
+);
+
+==========================================
+
+-->insert data in tab1
+
+INSERT INTO tab1 (name, value)
+VALUES 
+    ('Alice', 100),
+    ('Bob', 200),
+    ('Charlie', 300),
+    ('Daisy', 400);
+============================================
+
+-->insert data in tab2
+
+INSERT INTO tab2 (name, data)
+VALUES 
+    ('Alice', 10),
+    ('Charlie', 30),
+    ('Eve', 50);
+
+============================================
+
+-->to find the same data in both the table 
+based on name 
+
+SELECT *
+FROM tab1 t1
+INNER JOIN tab2 t2 ON t1.name = t2.name
+
+===========================================
+
+-->to arrange the table in desc order
+
+
+SELECT t1.name, t1.value, t2.data
+FROM tab1 t1
+INNER JOIN tab2 t2 ON t1.name = t2.name
+ORDER BY t1.value DESC;
+
+
+=========================
+
+--> to find max of  join table
+
+SELECT t1.name, t1.value, t2.data
+FROM tab1 t1
+INNER JOIN tab2 t2 ON t1.name = t2.name
+WHERE t1.value = (
+    SELECT MAX(t1_sub.value)
+    FROM tab1 t1_sub
+    INNER JOIN tab2 t2_sub ON t1_sub.name = t2_sub.name
+);
+
